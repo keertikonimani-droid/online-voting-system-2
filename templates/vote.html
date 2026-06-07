@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Vote - {{ election['title'] }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="vote-container">
+        <div class="vote-header">
+            <div class="vote-icon">&#128101;</div>
+            <h1>Candidate Selection</h1>
+            <p>{{ election['title'] }}</p>
+        </div>
+
+        <form method="POST" id="voteForm">
+            <div class="candidates-list">
+                {% set colors = ['#ff4081', '#2196f3', '#4caf50', '#ff9800', '#9c27b0'] %}
+                {% for candidate in candidates %}
+                <label class="candidate-option" id="option-{{ candidate['id'] }}">
+                    <div class="radio-circle"></div>
+                    <input type="radio" name="candidate_id" value="{{ candidate['id'] }}" required
+                           onchange="selectCandidate({{ candidate['id'] }})">
+                    <div class="candidate-avatar" style="background: {{ colors[loop.index0 % 5] }}">
+                        {{ candidate['name'][0] }}
+                    </div>
+                    <div class="candidate-info">
+                        <h3>{{ candidate['name'] }}</h3>
+                        <p>{{ candidate['party'] }}</p>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+
+            <div id="reviewSection" class="review-section" style="display: none;">
+                <h3>&#9989; Review &amp; Confirm</h3>
+                <div class="review-item">
+                    <span class="key">Election</span>
+                    <span class="val">{{ election['title'] }}</span>
+                </div>
+                <div class="review-item">
+                    <span class="key">Your Choice</span>
+                    <span class="val" id="selectedName">-</span>
+                </div>
+                <div class="confirm-check">
+                    <input type="checkbox" id="confirmVote" onchange="toggleSubmit()">
+                    <label for="confirmVote">I confirm this is my vote</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-submit-vote" id="submitBtn" disabled>Submit Vote</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function selectCandidate(id) {
+    document.querySelectorAll('.candidate-option').forEach(el => {
+        el.classList.remove('selected');
+    });
+    document.getElementById('option-' + id).classList.add('selected');
+
+    const label = document.querySelector('#option-' + id + ' .candidate-info h3');
+    document.getElementById('selectedName').textContent = label.textContent;
+    document.getElementById('reviewSection').style.display = 'block';
+    document.getElementById('confirmVote').checked = false;
+    document.getElementById('submitBtn').disabled = true;
+}
+
+function toggleSubmit() {
+    const confirmed = document.getElementById('confirmVote').checked;
+    const selected = document.querySelector('input[name="candidate_id"]:checked');
+    document.getElementById('submitBtn').disabled = !(confirmed && selected);
+}
+</script>
+{% endblock %}

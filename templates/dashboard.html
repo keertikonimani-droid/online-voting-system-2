@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - Secure Voting Portal{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <div class="header-icon">&#127968;</div>
+        <div class="header-text">
+            <h1>Dashboard <span class="status-badge status-open">Open</span></h1>
+            <p class="welcome">Welcome, <strong>{{ session['user_name'] }}</strong>! Your available elections:</p>
+        </div>
+    </div>
+
+    <div class="elections-grid">
+        {% for election in elections %}
+        <div class="election-card">
+            <div class="info">
+                <h3>{{ election['title'] }}</h3>
+                <p>Ends in {{ ((election['end_date'][:10] | string)[:10]) }} &middot; {{ election['description'] or 'Vote now' }}</p>
+            </div>
+            <div class="election-actions">
+                {% if election['id'] in voted_ids %}
+                <span class="btn-voted">&#10004; Voted</span>
+                <a href="{{ url_for('results', election_id=election['id']) }}" class="btn-results">&#128202; Results</a>
+                {% else %}
+                <a href="{{ url_for('vote', election_id=election['id']) }}" class="btn-vote">Vote</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+
+        {% if not elections %}
+        <div class="empty-state">
+            <div class="empty-icon">&#128499;</div>
+            <h3>No Active Elections</h3>
+            <p>Check back later for upcoming elections.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

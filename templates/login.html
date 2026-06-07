@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Login - Secure Voting Portal{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-layout">
+        <div class="auth-card">
+            <div class="logo-section">
+                <div class="logo-icon">&#128737;</div>
+                <div>
+                    <h1>Secure Voting Portal</h1>
+                </div>
+            </div>
+            <p class="subtitle">Enter your credentials to access the voting system</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" name="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Enter your password" required>
+                    </div>
+                </div>
+
+                <div class="remember-row">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Remember me for 30 days</label>
+                </div>
+
+                <button type="submit" class="btn-primary">&#x2192; Log In</button>
+                <a href="{{ url_for('register') }}" class="btn-secondary">&#128100; Register</a>
+            </form>
+
+            <div class="auth-footer">
+                <a href="#">Forgot password?</a>
+            </div>
+
+            <div class="security-info">
+                <h4>&#128274; Security Features</h4>
+                <p><span class="check">&#10004;</span> Your password is encrypted and never stored in plain text<br>
+                   <span class="check">&#10004;</span> Session times out after 10 minutes of inactivity</p>
+            </div>
+        </div>
+
+        <div class="auth-sidebar">
+            <div class="sidebar-card">
+                <h3>Login Tips</h3>
+                <div class="tip-item">
+                    <div class="tip-icon pink">&#9993;</div>
+                    <span>Use the email associated with your voter registration</span>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon blue">&#128273;</div>
+                    <span>Password must be at least 8 characters with numbers and symbols</span>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon purple">&#128241;</div>
+                    <span>You'll receive a verification code via SMS</span>
+                </div>
+            </div>
+
+            <div class="sidebar-card">
+                <h3>Need Help?</h3>
+                <div class="tip-item">
+                    <div class="tip-icon pink">&#128222;</div>
+                    <span>Call support: 1-800-VOTE-HELP</span>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon blue">&#9993;</div>
+                    <span>Email: support@voting.gov</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

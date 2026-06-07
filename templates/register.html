@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Register - Secure Voting Portal{% endblock %}
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-layout">
+        <div class="auth-card">
+            <div class="logo-section">
+                <div class="logo-icon">&#128737;</div>
+                <div>
+                    <h1>Create Account</h1>
+                </div>
+            </div>
+            <p class="subtitle">Register to participate in secure online elections</p>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('register') }}">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" name="email" placeholder="Enter your email" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="password" placeholder="Min 8 characters" required minlength="8">
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="confirm_password" placeholder="Confirm password" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">&#128100; Create Account</button>
+                <a href="{{ url_for('login') }}" class="btn-secondary">Already have an account? Log In</a>
+            </form>
+
+            <div class="security-info">
+                <h4>&#128274; Registration Tips</h4>
+                <p><span class="check">&#10004;</span> Use the email associated with your voter registration<br>
+                   <span class="check">&#10004;</span> Password must be at least 8 characters with numbers and symbols<br>
+                   <span class="check">&#10004;</span> You'll receive a verification code after registration</p>
+            </div>
+        </div>
+
+        <div class="auth-sidebar">
+            <div class="sidebar-card">
+                <h3>Why Register?</h3>
+                <div class="tip-item">
+                    <div class="tip-icon pink">&#128499;</div>
+                    <span>Participate in all available elections</span>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon blue">&#128202;</div>
+                    <span>View live results after voting</span>
+                </div>
+                <div class="tip-item">
+                    <div class="tip-icon purple">&#128274;</div>
+                    <span>Your identity and votes are fully encrypted</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

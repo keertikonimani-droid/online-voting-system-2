@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Results - {{ election['title'] }}{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="results-container">
+        <div class="results-header">
+            <div class="results-icon">&#128202;</div>
+            <div>
+                <h1>Live Results <span class="live-badge">LIVE</span></h1>
+                <p class="results-meta">{{ election['title'] }} &mdash; {{ total_votes }} votes cast</p>
+            </div>
+        </div>
+
+        {% for candidate in candidates %}
+        {% set percent = (candidate['vote_count'] / total_votes * 100) if total_votes > 0 else 0 %}
+        <div class="result-bar">
+            <div class="bar-header">
+                <span class="name">{{ candidate['name'] }}</span>
+                <span class="percent">{{ "%.0f"|format(percent) }}%</span>
+            </div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width: 0%" data-width="{{ "%.1f"|format(percent) }}%"></div>
+            </div>
+            <p class="votes-count">{{ candidate['vote_count'] }} votes &mdash; {{ candidate['party'] }}</p>
+        </div>
+        {% endfor %}
+
+        <div class="results-note">
+            &#128274; Your vote is anonymous. Results appear after polls close.
+        </div>
+
+        <a href="{{ url_for('dashboard') }}" class="btn-secondary" style="margin-top: 24px;">&#8592; Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        document.querySelectorAll('.bar-fill').forEach(function(bar) {
+            bar.style.width = bar.getAttribute('data-width');
+        });
+    }, 200);
+});
+</script>
+{% endblock %}

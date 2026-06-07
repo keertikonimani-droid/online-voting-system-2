@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <div class="header-icon">&#128736;</div>
+        <div class="header-text">
+            <h1>Admin Portal</h1>
+            <p class="welcome">Real-time election monitoring and management</p>
+        </div>
+    </div>
+
+    <div class="admin-stats">
+        <div class="stat-card">
+            <div class="stat-icon">&#128101;</div>
+            <p class="label">Total Voters</p>
+            <p class="value">{{ "{:,}".format(total_voters) }}</p>
+            <p class="change">&#8593; 8.2% from last election</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">&#128203;</div>
+            <p class="label">Votes Cast</p>
+            <p class="value">{{ "{:,}".format(total_votes) }}</p>
+            <p class="change">&#8593; 12.3% from last election</p>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">&#37;</div>
+            <p class="label">Turnout %</p>
+            <p class="value">{{ turnout }}%</p>
+            <p class="change">&#8593; 4.1% from last election</p>
+        </div>
+    </div>
+
+    {% for stat in election_stats %}
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>&#128202; {{ stat['election']['title'] }}</h2>
+            <span class="live-indicator">LIVE</span>
+        </div>
+        {% for candidate in stat['candidates'] %}
+        {% set percent = (candidate['vote_count'] / stat['total'] * 100) if stat['total'] > 0 else 0 %}
+        <div class="result-bar">
+            <div class="bar-header">
+                <span class="name">{{ candidate['name'] }}</span>
+                <span class="percent">{{ "%.0f"|format(percent) }}% &mdash; {{ "{:,}".format(candidate['vote_count']) }}</span>
+            </div>
+            <div class="bar-track">
+                <div class="bar-fill" style="width: {{ "%.1f"|format(percent) }}%"></div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    <div class="admin-section">
+        <div class="section-header">
+            <h2>&#128737; Security Status</h2>
+        </div>
+        <div class="security-panel">
+            <div class="security-item">
+                <span class="key">System Status</span>
+                <span class="val">Active</span>
+            </div>
+            <div class="security-item">
+                <span class="key">Last Update</span>
+                <span class="val">2 min ago</span>
+            </div>
+            <div class="security-item">
+                <span class="key">Security Level</span>
+                <span class="val">High</span>
+            </div>
+            <div class="security-item">
+                <span class="key">Encryption</span>
+                <span class="val">256-bit</span>
+            </div>
+        </div>
+        <p class="all-secure">&#9989; All systems secure</p>
+    </div>
+
+    <a href="{{ url_for('create_election') }}" class="btn-create">+ Create New Election</a>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Vote Confirmed{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="confirmation-container">
+        <div class="confirmation-icon">&#10004;</div>
+        <h1>Vote Submitted Successfully!</h1>
+        <p class="desc">Your vote has been encrypted and securely recorded. Thank you for participating in democracy.</p>
+
+        <div class="confirmation-code">
+            {{ code }}
+        </div>
+
+        <p class="confirmation-note">Save this confirmation code for your records. Your vote is anonymous and cannot be traced back to you.</p>
+
+        <div class="confirmation-actions">
+            <a href="{{ url_for('results', election_id=election_id) }}" class="btn-view-results">&#128202; View Results</a>
+            <a href="{{ url_for('dashboard') }}" class="btn-back-dashboard">&#127968; Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
